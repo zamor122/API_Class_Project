@@ -47,6 +47,7 @@ requestResults = urllib.urlopen(google_request)
 result = json.load(requestResults)
 #print result
 #print result in nice format
+print 'Results:', '\n'
 for i in range(0,len(result['results'][0]['name'])):
     listOfItems = result['results'][i]['name']
     niceList = '\n' + listOfItems
