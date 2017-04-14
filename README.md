@@ -8,5 +8,6 @@ The command line user interface is going to be simple and easy to use. There wil
 ## Sprint Log:
 Sprint 1:
   So far the amount completed is building the basic functionality for Google Places such as having the ability to find the top 10 locations using user provided key words. 
+
 Sprint 2:
   Next my goal will be to implement dense error handeling and more functionality such as narrowing results and building a better looking UI.
