@@ -10,6 +10,7 @@ import requests
 import json, urllib
 import re
 from urllib import urlencode
+import userFunctions
 client = googlemaps.Client(key='AIzaSyAMWWPiiqKIMReF93CjlGf2eaK6K-YMgFI')
 
 #get user location using freegeoip.net
@@ -21,22 +22,30 @@ lng = j['longitude']
 ##convert IPs to string
 userLat = str(lat)
 userLng = str(lng)
+######################################
+
 #Get search radius from user
 print ('1. Enter a search radius in meters (must be less than 50,000): ')
 print ('WARNING: If a 0 or no number is entered it will give you the results immediately around you')
-searchRadius = raw_input(str())
+userRadius = raw_input('Enter a search radius in meters between 0 and 50,000')
+stringRadius = userFunctions.getSearchRadius(userRadius)
+searchRadius = str(stringRadius)
+print searchRadius
+#######################################################################################################
 
-##try opening file for types if not close
+#try opening file for types if not close
 try:
     file = open('Types.txt')
 except:
     print IOError
-##get user desired place type
-print '\n','2. Enter the type of place you are searching for the options are: ', '\n'
+##Display all possible types of places to search for
 for line in file:
     print line
-userType = raw_input('')
-
+userSelection = raw_input('Enter a type of place from the list above: ')
+correctSelection = userFunctions.getUserType(userSelection)
+userType = str(correctSelection)
+print userType
+'''
 ###################
 #Find places nearby
 #create request
@@ -47,7 +56,9 @@ requestResults = urllib.urlopen(google_request)
 result = json.load(requestResults)
 #print result
 #print result in nice format
+print 'Results:', '\n'
 for i in range(0,len(result['results'][0]['name'])):
     listOfItems = result['results'][i]['name']
     niceList = '\n' + listOfItems
     print niceList
+'''
