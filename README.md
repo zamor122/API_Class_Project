@@ -9,7 +9,8 @@ This Python Client (of course)
 ## The User Interface
 The User Interface is simple, easy to use and no coding is necessary! Search for anything near you using this Google Places API.
 ## Sprint Log:
-Sprint 1:
+# Sprint 1:
   So far the amount completed is building the basic functionality for Google Places such as having the ability to find the top 10 locations using user provided key words.
-Sprint 2:
+
+# Sprint 2:
     During this spring I was able to change the code and maximize readability. I was able to add functionality such as finding the user's exact city and location. I was also able to add more error handling and directions for the user.
