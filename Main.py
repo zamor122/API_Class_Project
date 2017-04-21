@@ -26,6 +26,7 @@ while True:
     city = j['city'] + ', ' + j['region_code']
     # End function to get city
     print ('\n  2. Find a place near ' + city + '? Enter 2')
+    print ('\n  3. Enter the number 3 to exit the program!')
     selection = int(raw_input('\nEnter a valid value: '))
     if selection == 1:
         ##run get ip address
@@ -35,7 +36,7 @@ while True:
         userFunctions.searchForSomething()
         continue
     elif selection == 3:
-        False
+        print ('Thanks for using AroundME! ~Goodbye~')
         break
     else:
         print '\nERROR: Not a valid answer! Please enter a valid answer '
