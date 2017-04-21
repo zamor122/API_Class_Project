@@ -12,7 +12,6 @@ def getIPAddress():
     get_ip = 'http://freegeoip.net/json'
     ip = requests.get(get_ip)
     j = json.loads(ip.text)
-    print j
     print 'Your IP Address is: ',j['ip']
 #End function to get IP Address
 

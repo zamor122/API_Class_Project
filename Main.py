@@ -16,24 +16,26 @@ client = googlemaps.Client(key='AIzaSyAMWWPiiqKIMReF93CjlGf2eaK6K-YMgFI')
 
 ##beginning of program
 print ('Welcome to AroundME \nA program where searching is easy!')
-print ('\nDo you want to: ')
-print ('\n  1. Find your IP Address? Enter 1')
-#Begin function to obtain city
-get_ip = 'http://freegeoip.net/json'
-ip = requests.get(get_ip)
-j = json.loads(ip.text)
-city =  j['city']+', '+j['region_code']
-#End function to get city
-print ('\n  2.Find a place near '+city+' Enter 2')
 while True:
+    print ('\nDo you want to: ')
+    print ('\n  1. Find your IP Address? Enter 1')
+    # Begin function to obtain city
+    get_ip = 'http://freegeoip.net/json'
+    ip = requests.get(get_ip)
+    j = json.loads(ip.text)
+    city = j['city'] + ', ' + j['region_code']
+    # End function to get city
+    print ('\n  2. Find a place near ' + city + '? Enter 2')
     selection = int(raw_input('\nEnter a valid value: '))
     if selection == 1:
-        ##run get ipaddress
+        ##run get ip address
         userFunctions.getIPAddress()
-        break
+        continue
     elif selection == 2:
         userFunctions.searchForSomething()
+        continue
+    elif selection == 3:
+        False
         break
     else:
-        print '\nEnter a valid answer '
-
+        print '\nERROR: Not a valid answer! Please enter a valid answer '
