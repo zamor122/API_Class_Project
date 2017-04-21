@@ -3,7 +3,6 @@ import googlemaps
 import requests
 import json, urllib
 import re
-import mmap
 from urllib import urlencode
 
 
