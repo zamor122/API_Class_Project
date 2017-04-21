@@ -4,8 +4,7 @@ amusement_park
 aquarium
 art_gallery
 atm
-bakery
-bank
+bakerybank
 bar
 beauty_salon
 bicycle_store
