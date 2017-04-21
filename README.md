@@ -1,4 +1,4 @@
-##Directions
+## Directions
 1. Clone the repository into the desired directory.
 2. Run the Command as any normal python program (for now)
 ## Description
