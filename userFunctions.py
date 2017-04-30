@@ -1,3 +1,5 @@
+#author: Shayne Zamora
+
 #imports and needs:
 import googlemaps
 import requests
@@ -48,21 +50,42 @@ def searchForSomething():
     userType = raw_input(
         'Enter a type of place from the list above \nIf nothing is entered or not entered exactly as shown, default will be hotels nearby: ')
 
+    checkString(userType)
+    while True:
+        if(checkString(userType) == False):
+            print 'Error, that type was not found please select from the list below: '
+            for line in file:
+                print line
+            userType = raw_input('Enter a type from the list above: ')
+        elif(checkString(userType) == True):
+            break
+
     ###################
     # Find places nearby
     # create request
-    google_request = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + userLat + ', ' + userLng + '&radius=' + searchRadius + '&type=' + userType + '&keyword=&key=AIzaSyAMWWPiiqKIMReF93CjlGf2eaK6K-YMgFI'
+    google_request = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + userLat + ',' + userLng + '&radius=' + searchRadius + '&type=' + userType + '&keyword=&key=AIzaSyAMWWPiiqKIMReF93CjlGf2eaK6K-YMgFI'
+    print google_request
     # store request
     requestResults = urllib.urlopen(google_request)
     # get results in json form
     result = json.load(requestResults)
-    # print result
-    # print result in nice format
-    print 'Results:', '\n'
-    for i in range(0, len(result['results'][0]['name'])):
-        listOfItems = result['results'][i]['name']
-        niceList = '\n' + listOfItems
-        print niceList
+
+    #checks to see if request processed successfully
+    if result['status'] == "OK":
+        ##TODO add functionality to only print 5-10 results
+        print 'Results:', '\n'
+        for i in range(1, len(result['results'][0]['name'])):
+            if i > 10:
+                break
+            elif i < 0:
+                break
+            else:
+                listOfItems = result['results'][i]['name']
+                niceList = '\n' + listOfItems
+                print niceList
+    else:
+        print 'Sorry, your request was not processed successfully. Please restart and try again.'
+        return 0
 
 #End function to search for something
 
@@ -82,3 +105,16 @@ def getSearchRadius(radius):
     else:
         return radius
 #end searchRadius
+
+def checkString(typeChoice):
+    with open("Types.txt") as file:
+        text = file.read().strip().split()
+        while True:
+            try:
+                if typeChoice in text:
+                    return True
+                    break
+                else:
+                    return False
+            except Exception as e:
+                print(e)

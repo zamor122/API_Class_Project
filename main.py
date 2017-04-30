@@ -13,7 +13,6 @@ from urllib import urlencode
 import userFunctions
 client = googlemaps.Client(key='AIzaSyAMWWPiiqKIMReF93CjlGf2eaK6K-YMgFI')
 
-
 ##beginning of program
 print ('Welcome to AroundME \nA program where searching is easy!')
 while True:
@@ -31,12 +30,17 @@ while True:
     if selection == 1:
         ##run get ip address
         userFunctions.getIPAddress()
-        continue
+
     elif selection == 2:
         userFunctions.searchForSomething()
-        continue
+
     elif selection == 3:
         print ('Thanks for using AroundME! ~Goodbye~')
         break
     else:
         print '\nERROR: Not a valid answer! Please enter a valid answer '
+
+        ##TODO add functionality to see address of each place as well as possibly directions to get there
+        ##TODO add the ability to only see 5-10 results
+        ##TODO add a better UI system and a little more error handling
+        ##TODo try to add correct functionality for the radius and other problems occured
