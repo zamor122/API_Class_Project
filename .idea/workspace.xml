@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="55e7874b-0b70-43d4-90e7-07a72a6b8378" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/Main.py" afterPath="$PROJECT_DIR$/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/userFunctions.py" afterPath="$PROJECT_DIR$/userFunctions.py" />
-    </list>
+    <list default="true" id="55e7874b-0b70-43d4-90e7-07a72a6b8378" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
