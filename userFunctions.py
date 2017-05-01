@@ -4,21 +4,9 @@
 import googlemaps
 import requests
 import json, urllib
-import re
-from urllib import urlencode
 
 
-#Function to get IP Address
-def getIPAddress():
-    get_ip = 'http://freegeoip.net/json'
-    ip = requests.get(get_ip)
-    j = json.loads(ip.text)
-    print 'Your IP Address is: ',j['ip']
-#End function to get IP Address
-
-
-
-#Search for something, the major search function
+#Search for something, the major search function that searches for an item and prints the address and the Name of the place
 def searchForSomething():
     # get user location using freegeoip.net
     get_ip = 'http://freegeoip.net/json'
@@ -31,13 +19,26 @@ def searchForSomething():
     userLng = str(lng)
 
     # Get search radius from user
-    print ('1. Enter a search radius in meters (must be less than 50,000): ')
-    print ('WARNING: If a 0 or no number is entered it will give you the results immediately around you')
-    userRadius = raw_input('Enter a search radius in meters between 0 and 50,000')
-    stringRadius = getSearchRadius(userRadius)
-    searchRadius = str(stringRadius)
-    print searchRadius
-
+    while True:
+        try:
+            print ('\nWARNING: If a 0 or no number is entered it will give you the results immediately around you and may give you 0 search results')
+            print '\nRESTRICTIONS: '
+            print '     Do NOT use commas'
+            print '     Distance is in meters'
+            print '     Search radius must be between 0 (immediate results) and up to 50000'
+            userRadius = raw_input('Enter a search radius in meters between 0 and 50000: ')
+            intRadius = int(userRadius)
+            if intRadius > 50000:
+                searchRadius = '50000'
+                break
+            elif intRadius < 0:
+                searchRadius = '0'
+                break
+            else:
+                searchRadius = str(userRadius.strip())
+                break
+        except ValueError:
+            print "Please enter a number without commas!"
 
     # try opening file for types if not close
     try:
@@ -48,23 +49,35 @@ def searchForSomething():
     for line in file:
         print line
     userType = raw_input(
-        'Enter a type of place from the list above \nIf nothing is entered or not entered exactly as shown, default will be hotels nearby: ')
+        'Enter a type of place from the list above: ')
 
     checkString(userType)
     while True:
         if(checkString(userType) == False):
-            print 'Error, that type was not found please select from the list below: '
-            for line in file:
-                print line
+            print 'Error, that type was not found please select from the list above: '
             userType = raw_input('Enter a type from the list above: ')
         elif(checkString(userType) == True):
             break
-
+    showRating = False
+    while True:
+        try:
+            print 'Would you like to see the ratings of each place around you?'
+            answer = raw_input('\nEnter YES or NO: ')
+            userAnswer = answer.lower()
+            if userAnswer == 'yes':
+                showRating = True
+                break
+            elif userAnswer == 'no':
+                break
+            else:
+                print 'That is not a valid answer! Try entering a valid answer'
+        except ValueError:
+            print 'That is not a valid answer! Try entering a valid answer'
     ###################
     # Find places nearby
     # create request
     google_request = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + userLat + ',' + userLng + '&radius=' + searchRadius + '&type=' + userType + '&keyword=&key=AIzaSyAMWWPiiqKIMReF93CjlGf2eaK6K-YMgFI'
-    print google_request
+    #print google_request
     # store request
     requestResults = urllib.urlopen(google_request)
     # get results in json form
@@ -72,40 +85,49 @@ def searchForSomething():
 
     #checks to see if request processed successfully
     if result['status'] == "OK":
-        ##TODO add functionality to only print 5-10 results
-        print 'Results:', '\n'
+        print '\nRESULTS:\n'
         for i in range(1, len(result['results'][0]['name'])):
-            if i > 10:
-                break
-            elif i < 0:
-                break
-            else:
-                listOfItems = result['results'][i]['name']
-                niceList = '\n' + listOfItems
-                print niceList
+            try:
+                if i > 10:
+                    print 'END OF RESULTS\n'
+                    break
+                elif i < 0:
+                    break
+                else:
+                    try:
+                        if showRating == True:
+                            listOfItems = result['results'][i]['name']
+                            niceList = '\n' + listOfItems
+                            print i,'Name: ' + niceList
+                            listOfAddresses = result['results'][i]['vicinity']
+                            niceAddress = '\n' + listOfAddresses
+                            print 'Address: '+ niceAddress
+                            listOfRating = result['results'][i]['rating']
+                            niceRatings =  listOfRating
+                            print 'Rating: ' , niceRatings ,' out of 5'
+                            print '\n'
+
+                        else:
+                            listOfItems = result['results'][i]['name']
+                            niceList = '\n' + listOfItems
+                            print i, 'Name: ' + niceList
+                            listOfAddresses = result['results'][i]['vicinity']
+                            niceAddress = '\n' + listOfAddresses
+                            print 'Address: ' + niceAddress + ' \n'
+                    except KeyError:
+                        print 'Sorry, no rating available!\n'
+
+            except IndexError:
+                continue
+    elif result['status'] == "ZERO_RESULTS":
+            print 'No results found, try widening your radius!'
     else:
-        print 'Sorry, your request was not processed successfully. Please restart and try again.'
+        print 'Sorry, your request was not processed successfully. Please try widening your search radius'
         return 0
-
-#End function to search for something
-
+#end searchForSomething
 
 
-#get desired radius to search to be used in search for something function
-def getSearchRadius(radius):
-    if(radius > 50000):
-        radius = 50000
-        return radius
-    elif(radius < 0):
-        radius = 0
-        return radius
-    elif(radius is ' '):
-        radius = 0
-        return radius
-    else:
-        return radius
-#end searchRadius
-
+#function to check if string exists within Types.txt
 def checkString(typeChoice):
     with open("Types.txt") as file:
         text = file.read().strip().split()
@@ -118,3 +140,13 @@ def checkString(typeChoice):
                     return False
             except Exception as e:
                 print(e)
+#end checkString
+
+
+# Function to get IP Address
+def getIPAddress():
+    get_ip = 'http://freegeoip.net/json'
+    ip = requests.get(get_ip)
+    j = json.loads(ip.text)
+    print '\nYour IP Address is: ', j['ip']
+#end getIPAddress

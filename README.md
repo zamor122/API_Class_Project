@@ -4,9 +4,10 @@
 # Specifications
 ## Description
 This is a Client for the GoogleMaps, googleplaces API. This is going to have a command line UI system that will be much easier to use so no coding is necessary. 
-## System Requirements 
-Python 2.7
-This Python Client (of course)
+## System Requirements
+An Internet connection (MANDATORY)
+Python 2.7 (MANDATORY)
+This Python Client (of course) (MANDATORY)
 ## The User Interface
 The User Interface is simple, easy to use and no coding is necessary! Search for anything near you using this Google Places API.
 ## Sprint Log:
