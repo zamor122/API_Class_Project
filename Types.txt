@@ -30,20 +30,15 @@ doctor
 electrician
 electronics_store
 embassy
-establishment (deprecated)
-finance (deprecated)
 fire_station
 florist
 food (deprecated)
 funeral_home
 furniture_store
 gas_station
-general_contractor (deprecated)
-grocery_or_supermarket (deprecated)
 gym
 hair_care
 hardware_store
-health (deprecated)
 hindu_temple
 home_goods_store
 hospital
@@ -70,7 +65,6 @@ parking
 pet_store
 pharmacy
 physiotherapist
-place_of_worship (deprecated)
 plumber
 police
 post_office

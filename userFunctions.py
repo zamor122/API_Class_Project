@@ -14,7 +14,7 @@ def searchForSomething():
     j = json.loads(ip.text)
     lat = j['latitude']
     lng = j['longitude']
-    ##convert IPs to string
+    ##convert location to string
     userLat = str(lat)
     userLng = str(lng)
 
@@ -24,6 +24,7 @@ def searchForSomething():
             print ('\nWARNING: If a 0 or no number is entered it will give you the results immediately around you and may give you 0 search results')
             print '\nRESTRICTIONS: '
             print '     Do NOT use commas'
+            print '     Do NOT use decimals'
             print '     Distance is in meters'
             print '     Search radius must be between 0 (immediate results) and up to 50000'
             userRadius = raw_input('Enter a search radius in meters between 0 and 50000: ')
@@ -38,7 +39,7 @@ def searchForSomething():
                 searchRadius = str(userRadius.strip())
                 break
         except ValueError:
-            print "Please enter a number without commas!"
+            print "Please enter a number without commas or decimals!"
 
     # try opening file for types if not close
     try:
@@ -96,14 +97,26 @@ def searchForSomething():
                 else:
                     try:
                         if showRating == True:
+                            ##getting name of place
                             listOfItems = result['results'][i]['name']
-                            niceList = '\n' + listOfItems
-                            print i,'Name: ' + niceList
+                            niceList = listOfItems
+                            print i,') '+'Name: ' + niceList
+                            #getting address of place
+
                             listOfAddresses = result['results'][i]['vicinity']
-                            niceAddress = '\n' + listOfAddresses
+                            niceAddress = listOfAddresses
                             print 'Address: '+ niceAddress
+
+                            ##looking to see if place is open
+                            listOfOpen = result['results'][0]['opening_hours']['open_now']
+                            if listOfOpen == True:
+                                print "It's open now! :)"
+                            else:
+                                print "It's closed now! :("
+
+                            ##looking to see if place has rating, if it does, print it
                             listOfRating = result['results'][i]['rating']
-                            niceRatings =  listOfRating
+                            niceRatings = listOfRating
                             print 'Rating: ' , niceRatings ,' out of 5'
                             print '\n'
 
