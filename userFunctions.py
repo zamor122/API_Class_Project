@@ -4,6 +4,7 @@
 import googlemaps
 import requests
 import json, urllib
+import re
 
 
 #Search for something, the major search function that searches for an item and prints the address and the Name of the place
@@ -49,8 +50,9 @@ def searchForSomething():
     ##Display all possible types of places to search for
     for line in file:
         print line
-    userType = raw_input(
+    userAnswer = raw_input(
         'Enter a type of place from the list above: ')
+    userType = userAnswer.lower()
 
     checkString(userType)
     while True:
@@ -62,8 +64,8 @@ def searchForSomething():
     showRating = False
     while True:
         try:
-            print 'Would you like to see the ratings of each place around you?'
-            answer = raw_input('\nEnter YES or NO: ')
+            print '\nWould you like to see the ratings of each place around you?'
+            answer = raw_input('Enter YES or NO: ')
             userAnswer = answer.lower()
             if userAnswer == 'yes':
                 showRating = True
@@ -78,7 +80,7 @@ def searchForSomething():
     # Find places nearby
     # create request
     google_request = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + userLat + ',' + userLng + '&radius=' + searchRadius + '&type=' + userType + '&keyword=&key=AIzaSyAMWWPiiqKIMReF93CjlGf2eaK6K-YMgFI'
-    #print google_request
+    print google_request
     # store request
     requestResults = urllib.urlopen(google_request)
     # get results in json form
@@ -101,8 +103,8 @@ def searchForSomething():
                             listOfItems = result['results'][i]['name']
                             niceList = listOfItems
                             print i,') '+'Name: ' + niceList
-                            #getting address of place
 
+                            #getting address of place
                             listOfAddresses = result['results'][i]['vicinity']
                             niceAddress = listOfAddresses
                             print 'Address: '+ niceAddress
@@ -118,15 +120,44 @@ def searchForSomething():
                             listOfRating = result['results'][i]['rating']
                             niceRatings = listOfRating
                             print 'Rating: ' , niceRatings ,' out of 5'
-                            print '\n'
+
+                            #get user distance from each place
+                            userLocation = userLat + ',' + userLng
+                            Lat= result['results'][i]['geometry']['location']['lat']
+                            Lng = result['results'][i]['geometry']['location']['lng']
+                            destLat = str(Lat)
+                            destLng = str(Lng)
+                            destLocation = destLat + ',' + destLng
+                            getTimeTravel(userLocation,destLocation)
 
                         else:
+                            ##getting name of place
                             listOfItems = result['results'][i]['name']
-                            niceList = '\n' + listOfItems
-                            print i, 'Name: ' + niceList
+                            niceList = listOfItems
+                            print i, ') ' + 'Name: ' + niceList
+                            # getting address of place
+
                             listOfAddresses = result['results'][i]['vicinity']
-                            niceAddress = '\n' + listOfAddresses
-                            print 'Address: ' + niceAddress + ' \n'
+                            niceAddress = listOfAddresses
+                            print 'Address: ' + niceAddress
+
+
+                            ##looking to see if place is open
+                            listOfOpen = result['results'][0]['opening_hours']['open_now']
+                            if listOfOpen == True:
+                                print "It's open now! :)"
+                            else:
+                                print "It's closed now! :("
+
+                            # get user distance from each place
+                            userLocation = userLat + ',' + userLng
+                            Lat = result['results'][i]['geometry']['location']['lat']
+                            Lng = result['results'][i]['geometry']['location']['lng']
+                            destLat = str(Lat)
+                            destLng = str(Lng)
+                            destLocation = destLat + ',' + destLng
+                            getTimeTravel(userLocation, destLocation)
+########################### ERROR CATCHING ###################################################
                     except KeyError:
                         print 'Sorry, no rating available!\n'
 
@@ -146,11 +177,12 @@ def checkString(typeChoice):
         text = file.read().strip().split()
         while True:
             try:
-                if typeChoice in text:
+                if typeChoice.lower() in text:
                     return True
                     break
                 else:
                     return False
+            ########################### ERROR CATCHING ################################
             except Exception as e:
                 print(e)
 #end checkString
@@ -163,3 +195,75 @@ def getIPAddress():
     j = json.loads(ip.text)
     print '\nYour IP Address is: ', j['ip']
 #end getIPAddress
+
+#get the travel distance between user and location
+def getTimeTravel(start, finish):
+    startLocation = start
+    endLocation = finish
+    distanceRequest = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" + startLocation + "&destinations="+endLocation+"&key=AIzaSyCTr-K7HHEipMPY6UdPdVH7fd5TaBH3gLM"
+    #print distanceRequest
+    # store request
+    timeResult = urllib.urlopen(distanceRequest)
+    # distanceRequest
+    results = json.load(timeResult)
+    listOfTimes = results['rows'][0]['elements'][0]['distance']['text']
+    niceList = listOfTimes
+    print 'This location is ' + niceList + ' from you!\n'
+#end getTimeTravel
+
+#get user location
+def getLocation():
+    # get user location using freegeoip.net
+    get_ip = 'http://freegeoip.net/json'
+    ip = requests.get(get_ip)
+    j = json.loads(ip.text)
+    lat = j['latitude']
+    lng = j['longitude']
+    ##convert location to string
+    userLat = str(lat)
+    userLng = str(lng)
+    userLocation = userLat+','+userLng
+    return userLocation
+
+
+#end getLocation
+
+#begin function to get the time travel from user given destination
+def getUserTimeTravel():
+    try:
+        while True:
+            try:
+                start = raw_input('\nEnter the address or place you want to start your travels.\nIf you want to use your current location, type current location: ')
+                if start.__contains__(','):
+                    startLocation = start.lower().replace(" ", "")
+                    break
+                if start.lower() == 'current location':
+                    startLocation = getLocation()
+                    break
+                else:
+                    raise ValueError
+            except ValueError:
+                print 'ERROR: Please enter a valid address or the words "current location"'
+        while True:
+            try:
+                destination = raw_input('Enter the address or place of destination: ')
+                if destination.__contains__(','):
+                    endLocation = destination.lower().replace(" ", "")
+                    break
+                else:
+                    raise ValueError
+            except ValueError:
+                print 'ERROR: Please enter a valid address'
+        distanceRequest = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" + startLocation + "&destinations=" + endLocation + "&key=AIzaSyCTr-K7HHEipMPY6UdPdVH7fd5TaBH3gLM"
+        #print distanceRequest
+        # store request
+        timeResult = urllib.urlopen(distanceRequest)
+        # distanceRequest
+        results = json.load(timeResult)
+        listOfTimes = results['rows'][0]['elements'][0]['duration']['text']
+        niceList = listOfTimes
+        print'\nRESULTS'
+        getTimeTravel(startLocation,endLocation)
+        print 'It will take you ' + niceList + ' to get to ' +destination+ '!\nEND RESULTS'
+    except KeyError:
+        print '\nERROR: Sorry there was a problem with your starting location or your endpoint\nTry entering a different address or using your current location'
