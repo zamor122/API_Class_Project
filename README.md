@@ -9,7 +9,7 @@ An Internet connection (MANDATORY),
 Python 2.7 (MANDATORY),
 This Python Client (of course) (MANDATORY)
 ## The User Interface
-The User Interface is simple, easy to use and no coding is necessary! Search for anything near you using this Google Places API.
+The User Interface is simple, easy to use and no coding is necessary! Search for anything near you using this Google Places API client.
 ## Sprint Log:
 ### Sprint 1:
   So far the amount completed is building the basic functionality for Google Places such as having the ability to find the top 10 locations using user provided key words.
@@ -19,3 +19,7 @@ The User Interface is simple, easy to use and no coding is necessary! Search for
 
 ### Sprint 3:
   I was able to add additional functionality to get the address of the places searched for as well as the ratings. I also added very dense error capturing so to prvent any errors when submitting a request. 
+### Sprint 4:
+  During this final sprint I added some major error handeling and fixed some wording that may have been confusing. I also was able to add some new functionality to search for an address and provide the time it will take for a user to get from place to place! Check it out by entering #3! 
+  
+  # Thanks For Finding with AroundME!
