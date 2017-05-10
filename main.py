@@ -24,7 +24,7 @@ try:
         city = j['city'] + ', ' + j['region_code']
         # End function to get city
         print ('\n  2. Find a place near ' + city + '? Enter 2')
-        print ('\n  3. Find a travel time to a destination from a different start location? Enter 3')
+        print ('\n  3. Find a travel time to a destination from a start location? Enter 3')
         print ('\n  4. Enter the number 4 to exit the program!')
         try:
             selection = int(raw_input('\nEnter a valid value: '))
